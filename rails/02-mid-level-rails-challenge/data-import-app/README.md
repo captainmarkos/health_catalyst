@@ -73,3 +73,14 @@ Run all the tests.
 ```
 bundle exec rspec
 ```
+
+### Run the application
+```
+rails server
+```
+
+List of imports:
+http://0.0.0.0:3000/imports
+
+List of Customers:
+http://0.0.0.0:3000/customers
