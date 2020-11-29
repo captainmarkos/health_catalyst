@@ -1,0 +1,36 @@
+- customer_name = @import.customer.name
+
+%div.container-fluid
+  %div.row.row-header
+    %div.col-12.mb-4
+      %h3= "Import for #{customer_name}"
+
+%div.container-fluid
+  %div.row.row-content
+    %div= link_to('Imports List', imports_path, class: 'btn btn-primary')
+
+    %div.table
+      %table.table.table-striped
+        %thead.thead-dark
+          %tr
+            %th= 'ID'
+            %th= 'CUSTOMER'
+            %th= 'START'
+            %th= 'END'
+            %th= 'DURATION'
+            %th= 'STATUS'
+            %th= 'IDENTIFIER'
+        %tbody
+          - if @import.present?
+            %tr
+              %td= @import.id
+              %td= link_to customer_name, customer_path(@import.customer.id)
+              %td= @import.start_time.localtime.strftime('%Y-%m-%d %H:%M:%S')
+              %td= @import.end_time.localtime.strftime('%Y-%m-%d %H:%M:%S')
+              %td= @import.duration
+              %td= @import.status
+              %td= @import.identifier
+          - else
+            %tr
+              %td{ colspan: 7 }= 'No customer imports found.'
+

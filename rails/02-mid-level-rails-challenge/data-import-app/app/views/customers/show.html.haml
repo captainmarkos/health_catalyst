@@ -1,0 +1,62 @@
+%div.container-fluid
+  %div.row.row-header
+    %div.col-12.mb-4
+      %h3= 'Customer Record'
+
+%div.container-fluid
+  %div.row.row-content
+    %div= link_to('Customer List', customers_path, class: 'btn btn-primary')
+
+    %div.table
+      %table.table.table-striped
+        %thead.thead-dark
+          %tr
+            %th= 'ID'
+            %th= 'NAME'
+            %th= 'SUBDOMAIN'
+            %th= 'LOCATION'
+            %th= 'PARTNER'
+        %tbody
+          - @customers.each do |customer|
+            %tr
+              %td= customer.id
+              %td= customer.name
+              %td= customer.subdomain
+              %td= customer.location
+              %td= customer.partner.name
+
+%div.container-fluid
+  %div.row.row-content
+    %div.col-12.mb-4
+      %h3= "Imports for #{@customers.first.name}"
+
+      - query_params = request.query_parameters.merge({format: :csv, customer_id: @customers.first.id})
+      %div= link_to 'Export as CSV', export_imports_path(query_params), class: 'btn btn-primary'
+
+  %div.row.row-content
+    %div.col-12.col-sm-12
+      %div.table
+
+        %table.table.table-striped
+          %thead.thead-dark
+            %tr
+              %th= 'ID'
+              %th= 'START'
+              %th= 'END'
+              %th= 'DURATION'
+              %th= 'STATUS'
+              %th= 'IDENTIFIER'
+          %tbody
+            - imports = @customers.first.imports
+            - if imports.present?
+              - imports.each do |import|
+                %tr
+                  %td= import.id
+                  %td= import.start_time.localtime.strftime('%Y-%m-%d %H:%M:%S')
+                  %td= import.end_time.localtime.strftime('%Y-%m-%d %H:%M:%S')
+                  %td= import.duration
+                  %td= import.status
+                  %td= import.identifier
+            - else
+              %tr
+                %td{ colspan: 6 }= 'No customer imports found.'

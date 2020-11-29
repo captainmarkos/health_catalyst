@@ -1,0 +1,53 @@
+:javascript
+  $(function() {
+    $('#status').change(function() {
+      var url = "#{request.url}".replace(/\&amp;/g, '&'); // I don't like this
+      var selected = $(this).val();
+
+      url = url.replace(/(\?status=.*$|&status=.*$|&status=.*&)/, '');
+
+      if (url.match(/customers\?/) && selected) {
+        url += '&status=' + selected;
+      } else if (selected) {
+       url += '?status=' + selected;
+      }
+
+      console.log('--> url: ', url);
+      location.assign(url);
+    });
+  });
+
+%div.container-fluid
+  %div.row.row-header
+    %div.col-12.mb-4
+      %h3= 'Customers'
+
+%div.container-fluid
+  %div.row.row-content
+    %div.table
+      %table.table.table-striped
+        %thead.thead-dark
+          %tr
+            - dir = 'desc'
+            - dir = 'asc' if params[:dir] == 'desc'
+            %th= link_to 'ID', sort: 'customers.id', dir: dir, status: params[:status]
+            %th= link_to 'NAME', sort: 'customers.name', dir: dir, status: params[:status]
+            %th= link_to 'SUBDOMAIN', sort: 'customers.subdomain', dir: dir, status: params[:status]
+            %th= link_to 'LOCATION', sort: 'customers.location', dir: dir, status: params[:status]
+            %th= link_to 'PARTNER', sort: 'partners.name', dir: dir, status: params[:status]
+            %th
+              = link_to 'LATEST IMPORT', sort: 'imports.start_time', dir: dir, status: params[:status]
+              = select_tag :status, options_for_status_select(params[:status]), { prompt: 'Import Status' }
+        %tbody
+          - @customers.each do |customer|
+            %tr
+              %td= link_to(customer.id, customer_path(customer.id))
+              %td= customer.name
+              %td= customer.subdomain
+              %td= customer.location
+              %td= customer.partner.name
+              - import = latest_import(customer)
+              - if import.present?
+                %td= link_to import.start_time.localtime.strftime('%Y-%m-%d %H:%M:%S'), import_path(import.id)
+              - else
+                %td

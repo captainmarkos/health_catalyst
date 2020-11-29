@@ -1,0 +1,33 @@
+%div.container-fluid
+  %div.row.row-header
+    %div.col-12.mb-4
+      %h3= 'Imports'
+
+%div.container-fluid
+  %div.row.row-content
+    %div.col-12.col-sm-12
+      %div.table
+
+        %table.table.table-striped
+          %thead.thead-dark
+            %tr
+              - dir = 'desc'
+              - dir = 'asc' if params[:dir] == 'desc'
+              %th= link_to 'ID', sort: 'id', dir: dir
+              %th= link_to 'CUSTOMER', sort: 'customers.name', dir: dir
+              %th= link_to 'START', sort: 'start_time', dir: dir
+              %th= link_to 'END', sort: 'end_time', dir: dir
+              %th= link_to 'DURATION', sort: 'duration', dir: dir
+              %th= link_to 'STATUS', sort: 'status', dir: dir
+              %th= link_to 'IDENTIFIER', sort: 'identifier', dir: dir
+          %tbody
+            - @imports.each do |import|
+              %tr
+                %td= link_to import.id, import_path(import.id)
+                %td= link_to import.customer.name, customer_path(import.customer.id)
+                %td= import.start_time.localtime.strftime('%Y-%m-%d %H:%M:%S')
+                %td= import.end_time.localtime.strftime('%Y-%m-%d %H:%M:%S')
+                %td= import.duration
+                %td= import.status
+                %td= import.identifier
+
