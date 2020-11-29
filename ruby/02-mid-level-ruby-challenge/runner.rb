@@ -15,5 +15,14 @@ end
 # Implement runner code below that invokes code written in the 'src' directory
 # The format, output, etc. are up to you. Below is provided to ensure the files
 # are being read successfully on your machine
-puts "Working on #{ARGV}";
-puts Code.parse_csv(File.join(File.dirname(__FILE__), 'data/patients-day-1.csv')).first(5).map(&:to_s)
+day = ARGV[0].to_i
+
+patients = Code.process_patients(day)
+clinical_activities = Code.process_clinical_activities(day)
+
+records = Code.collect_new(patients, day)
+puts Code.column_names(records)
+puts Code.column_data(records, 'new')
+
+records = Code.collect_changed(patients, clinical_activities, day)
+puts Code.column_data(records, 'changed')

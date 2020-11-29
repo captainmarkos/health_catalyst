@@ -2,8 +2,9 @@
 
 source 'https://rubygems.org'
 
-ruby '2.7.1'
+ruby '2.6.3'
 
 gem 'pry'
 gem 'require_all'
 gem 'rspec'
+gem 'simplecov'
